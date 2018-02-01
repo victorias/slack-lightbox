@@ -1,1 +1,4 @@
-const API_KEY = 'AIzaSyB8yrXpx6hx0cDTAHwyg9lPU5zf5MvTm8Y';
+import Matrix from './components/matrix';
+const gifMatrix = document.getElementById('gif-matrix');
+
+const matrix = new Matrix(gifMatrix);
