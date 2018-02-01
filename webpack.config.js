@@ -6,7 +6,6 @@ module.exports = {
   devtool: 'eval-source-map',
   devServer: {
     contentBase: './public',
-    hot: true,
   },
   output: {
     filename: 'bundle.js',
@@ -24,9 +23,6 @@ module.exports = {
         exclude: /(node_modules|bower_components)/,
         use: {
           loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-env'],
-          },
         },
       },
     ],
