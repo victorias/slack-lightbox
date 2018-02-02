@@ -90,9 +90,7 @@ class Lightbox {
 
   attachNext(onClickNext) {
     this.next.style.visibility = 'visible';
-    this.next.addEventListener('click', () => {
-      onClickNext();
-    });
+    this.next.addEventListener('click', onClickNext);
   }
 
   attachBack(onClickBack) {
