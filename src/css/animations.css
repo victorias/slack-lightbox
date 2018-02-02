@@ -24,3 +24,31 @@
 .fade-out {
   animation: fadeout 300ms;
 }
+
+@keyframes slideOutToRight {
+  from {
+    right: 0;
+  }
+
+  to {
+    right: 100vw;
+  }
+}
+
+.slide-out-to-right {
+  animation: slideOutToRight 300ms;
+}
+
+@keyframes slideInFromLeft {
+  from {
+    left: 100vw;
+  }
+
+  to {
+    left: 0;
+  }
+}
+
+.slide-in-from-left {
+  animation: slideInFromLeft 300ms;
+}

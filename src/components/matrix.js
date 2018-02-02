@@ -41,16 +41,40 @@ class Matrix {
   };
 
   onClickImg = idx => {
+    console.log(idx);
     this.selectedIndex = idx;
-    console.log(this.data[idx]);
     this.lightbox.show(
-      this.data[idx].images.original.url,
-      this.data[idx].title
+      this.data[this.selectedIndex].images.original.url,
+      this.data[this.selectedIndex].title,
+      this.selectedIndex !== this.data.length - 1 && this.onClickNext,
+      this.selectedIndex !== 0 && this.onClickBack
     );
   };
 
   onCloseLightbox = () => {
     this.selectedIndex = null;
+  };
+
+  onClickNext = () => {
+    console.log(this.selectedIndex);
+    this.selectedIndex++;
+  };
+
+  onClickBack = () => {
+    console.log('back');
+    if (this.selectedIndex <= 0) {
+      debugger;
+    }
+    this.selectedIndex--;
+    console.log(this.selectedIndex);
+    console.log(this);
+
+    this.lightbox.goBack(
+      this.data[this.selectedIndex].images.original.url,
+      this.data[this.selectedIndex].title,
+      this.selectedIndex !== this.data.length - 1 && this.onClickNext,
+      this.selectedIndex !== 0 && this.onClickBack
+    );
   };
 }
 
