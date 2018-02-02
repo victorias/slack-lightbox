@@ -4,3 +4,31 @@
   flex-wrap: wrap;
   justify-content: space-between;
 }
+
+#lightbox {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.7);
+  top: 0;
+  left: 0;
+  visibility: hidden;
+
+  .lightbox-container {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+
+    .center {
+      max-width: 75vw;
+      max-height: 75vh;
+      display: flex;
+      flex-direction: column;
+
+      .img {
+        object-fit: contain;
+      }
+    }
+  }
+}

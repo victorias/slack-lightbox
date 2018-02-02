@@ -1,11 +1,18 @@
 import { getTrending } from '../api/giphy';
 import { onLoad } from '../utils/window';
+import Img from './img';
+import Lightbox from './lightbox';
 
 class Matrix {
   constructor(el) {
     this.element = el;
     this.data = [];
-    onLoad(this.build.bind(this));
+    this.lightbox = new Lightbox(this.onCloseLightbox);
+
+    this.selectedIndex = null;
+    onLoad(this.build);
+
+    return this.element;
   }
 
   async getGifs() {
@@ -20,19 +27,31 @@ class Matrix {
     this.data = json.data;
   }
 
-  async build() {
+  build = async () => {
     await this.getGifs();
 
-    this.data.map(gifObj => {
-      const gifElement = document.createElement('div');
-      const img = document.createElement('img');
-      img.src = gifObj.images.fixed_height.url;
-      img.width = gifObj.images.fixed_height.width;
-      img.height = gifObj.images.fixed_height.height;
-      gifElement.appendChild(img);
-      this.element.appendChild(gifElement);
+    const frag = document.createDocumentFragment();
+
+    this.data.map((gifObj, idx) => {
+      const img = new Img(gifObj, () => this.onClickImg(idx));
+      frag.appendChild(img);
     });
-  }
+
+    this.element.appendChild(frag);
+  };
+
+  onClickImg = idx => {
+    this.selectedIndex = idx;
+    console.log(this.data[idx]);
+    this.lightbox.show(
+      this.data[idx].images.original.url,
+      this.data[idx].title
+    );
+  };
+
+  onCloseLightbox = () => {
+    this.selectedIndex = null;
+  };
 }
 
 export default Matrix;
