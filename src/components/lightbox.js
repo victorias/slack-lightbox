@@ -104,8 +104,9 @@ class Lightbox {
         setTimeout(() => {
           this.element.style.display = 'none';
           this.element.className = '';
+          this.lightboxContainer.className = 'lightbox-container';
           this.onCloseLightbox();
-        }, 299);
+        }, 280);
       });
     }
   }
@@ -122,21 +123,19 @@ class Lightbox {
     const self = this;
     const newTree = self.buildInnerTree(imgUrl, title);
     self.element.appendChild(newTree);
-    queueAnimation(self.element, 'slide-out-to-right', () => {
-      self.lightboxContainer.remove();
-      queueAnimation(newTree, 'slide-in-from-left', () => {
-        const element = document.getElementById('lightbox');
-        element.appendChild(newTree);
-        self.storeTree(element);
+    self.lightboxContainer.remove();
+    queueAnimation(newTree, 'slide-in-from-left', () => {
+      const element = document.getElementById('lightbox');
+      element.appendChild(newTree);
+      self.storeTree(element);
 
-        if (onClickNext) {
-          self.attachNext(onClickNext);
-        }
+      if (onClickNext) {
+        self.attachNext(onClickNext);
+      }
 
-        if (onClickBack) {
-          self.attachBack(onClickBack);
-        }
-      });
+      if (onClickBack) {
+        self.attachBack(onClickBack);
+      }
     });
   }
 }

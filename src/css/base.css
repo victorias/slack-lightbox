@@ -22,8 +22,12 @@
     align-items: center;
     position: relative;
 
-    .back, .next {
+    .back,
+    .next {
       visibility: hidden;
+      font-size: 5em;
+      color: #ffffff;
+      cursor: pointer;
     }
 
     .center {
