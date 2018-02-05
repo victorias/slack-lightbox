@@ -41,7 +41,6 @@ class Matrix {
   };
 
   onClickImg = idx => {
-    console.log(idx);
     this.selectedIndex = idx;
     this.lightbox.show(
       this.data[this.selectedIndex].images.original.url,
@@ -56,7 +55,6 @@ class Matrix {
   };
 
   onClickNext = () => {
-    console.log(this.selectedIndex);
     this.selectedIndex++;
   };
 

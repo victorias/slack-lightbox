@@ -3,6 +3,10 @@
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-between;
+
+  .image {
+    cursor: pointer;
+  }
 }
 
 #lightbox {
@@ -27,9 +31,19 @@
     .back,
     .next {
       visibility: hidden;
-      font-size: 5em;
+      font-size: 2em;
       color: #ffffff;
       cursor: pointer;
+    }
+
+    .title-container {
+      display: flex;
+      justify-content: space-between;
+      color: white;
+
+      .close {
+        cursor: pointer;
+      }
     }
 
     .center {

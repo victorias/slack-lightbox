@@ -14,6 +14,8 @@ class Lightbox {
         this.close();
       }
     });
+
+    window.addEventListener('resize', this.sizeOverlay.bind(this));
   }
 
   build(imgUrl = null, title = null) {
@@ -35,10 +37,10 @@ class Lightbox {
     lightboxContainer.className = 'lightbox-container';
     const back = document.createElement('div');
     back.className = 'back';
-    back.innerHTML = '&lt;';
+    back.innerHTML = `<i class="fas fa-arrow-circle-left"></i>`;
     const next = document.createElement('div');
     next.className = 'next';
-    next.innerHTML = '&gt;';
+    next.innerHTML = `<i class="fas fa-arrow-circle-right"></i>`;
 
     if (onClickNext) {
       next.style.visibility = 'visible';
@@ -52,18 +54,27 @@ class Lightbox {
 
     const center = document.createElement('div');
     center.className = 'center';
+    const titleContainer = document.createElement('div');
+    titleContainer.className = 'title-container';
     const titleEl = document.createElement('div');
     titleEl.className = 'title';
     if (title) {
       titleEl.innerHTML = title;
     }
+    const closeButton = document.createElement('div');
+    closeButton.className = 'close';
+    closeButton.innerText = 'x';
+    closeButton.addEventListener('click', this.close.bind(this));
+    titleContainer.appendChild(titleEl);
+    titleContainer.appendChild(closeButton);
+
     const img = document.createElement('img');
     img.className = 'img';
     if (imgUrl) {
       img.src = imgUrl;
     }
 
-    center.appendChild(titleEl);
+    center.appendChild(titleContainer);
     center.appendChild(img);
 
     lightboxContainer.appendChild(back);
@@ -86,7 +97,7 @@ class Lightbox {
 
   show(imgUrl, title, onClickNext = null, onClickBack = null) {
     this.sizeOverlay();
-    this.positionLightbox();
+    this.positionLightbox(this.lightboxContainer);
 
     this.isOpen = true;
     this.img.src = imgUrl;
@@ -108,14 +119,14 @@ class Lightbox {
   }
 
   close() {
-    if (this.open) {
+    if (this.isOpen) {
       queueAnimation(this.element, 'fade-out', () => {
         setTimeout(() => {
           this.element.style.display = 'none';
           this.element.className = '';
           this.lightboxContainer.className = 'lightbox-container';
           this.onCloseLightbox();
-        }, 280);
+        }, 300);
       });
     }
   }
@@ -124,8 +135,8 @@ class Lightbox {
     this.element.style.height = `${document.body.clientHeight}px`;
   }
 
-  positionLightbox() {
-    this.lightboxContainer.style.marginTop = `${window.scrollY}px`;
+  positionLightbox(lightboxContainer) {
+    lightboxContainer.style.marginTop = `${window.scrollY}px`;
   }
 
   goBack(imgUrl, title, onClickNext = null, onClickBack = null) {
@@ -137,6 +148,7 @@ class Lightbox {
     );
     this.element.appendChild(newTree);
     const oldLightboxContainer = this.lightboxContainer;
+    this.positionLightbox(newTree);
     queueAnimation(oldLightboxContainer, 'slide-out-to-right', () => {
       const element = document.getElementById('lightbox');
       element.appendChild(newTree);
@@ -156,6 +168,7 @@ class Lightbox {
     );
     this.element.appendChild(newTree);
     const oldLightboxContainer = this.lightboxContainer;
+    this.positionLightbox(newTree);
     queueAnimation(oldLightboxContainer, 'slide-out-to-left', () => {
       const element = document.getElementById('lightbox');
       element.appendChild(newTree);

@@ -12,6 +12,7 @@ class Img {
     img.src = this.data.images.fixed_height.url;
     img.width = this.data.images.fixed_height.width;
     img.height = this.data.images.fixed_height.height;
+    img.className = 'image';
     this.gifElement.appendChild(img);
     this.gifElement.addEventListener('click', this.onClick);
   }

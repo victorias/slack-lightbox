@@ -9,6 +9,7 @@
 
 .fade-in {
   animation: fadein 300ms;
+  animation-fill-mode: backwards;
 }
 
 @keyframes fadeout {
@@ -23,6 +24,7 @@
 
 .fade-out {
   animation: fadeout 300ms;
+  animation-fill-mode: forwards;
 }
 
 .slide-out-to-right {
