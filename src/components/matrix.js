@@ -76,6 +76,17 @@ class Matrix {
       this.selectedIndex !== 0 && this.onClickBack
     );
   };
+
+  onClickNext = () => {
+    this.selectedIndex++;
+
+    this.lightbox.goForward(
+      this.data[this.selectedIndex].images.original.url,
+      this.data[this.selectedIndex].title,
+      this.selectedIndex !== this.data.length - 1 && this.onClickNext,
+      this.selectedIndex !== 0 && this.onClickBack
+    );
+  };
 }
 
 export default Matrix;

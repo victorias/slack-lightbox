@@ -25,18 +25,12 @@
   animation: fadeout 300ms;
 }
 
-@keyframes slideInFromLeft {
-  from {
-    left: 100vw;
-  }
-
-  to {
-    left: 0;
-  }
+.slide-out-to-right {
+  transition: margin-left 300ms;
+  margin-left: 100vw;
 }
 
-.slide-in-from-left {
-  animation: slideInFromLeft 300ms;
-  animation-fill-mode: both;
-  animation-delay: 300ms;
+.slide-out-to-left {
+  transition: margin-left 300ms;
+  margin-left: -100vw;
 }

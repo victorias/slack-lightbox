@@ -1,4 +1,5 @@
 import { queueAnimation } from '../utils/window';
+import { last } from '../utils/array';
 
 class Lightbox {
   constructor(onClose) {
@@ -24,7 +25,12 @@ class Lightbox {
     return element;
   }
 
-  buildInnerTree(imgUrl = null, title = null) {
+  buildInnerTree(
+    imgUrl = null,
+    title = null,
+    onClickNext = null,
+    onClickBack = null
+  ) {
     const lightboxContainer = document.createElement('div');
     lightboxContainer.className = 'lightbox-container';
     const back = document.createElement('div');
@@ -33,6 +39,16 @@ class Lightbox {
     const next = document.createElement('div');
     next.className = 'next';
     next.innerHTML = '&gt;';
+
+    if (onClickNext) {
+      next.style.visibility = 'visible';
+      next.addEventListener('click', onClickNext);
+    }
+
+    if (onClickBack) {
+      back.style.visibility = 'visible';
+      back.addEventListener('click', onClickBack);
+    }
 
     const center = document.createElement('div');
     center.className = 'center';
@@ -59,43 +75,36 @@ class Lightbox {
 
   storeTree(element) {
     this.element = element;
-    this.lightboxContainer = element.getElementsByClassName(
-      'lightbox-container'
-    )[0];
-    this.back = element.getElementsByClassName('back')[0];
-    this.next = element.getElementsByClassName('next')[0];
-    this.title = element.getElementsByClassName('title')[0];
-    this.img = element.getElementsByTagName('img')[0];
+    this.lightboxContainer = last(
+      element.getElementsByClassName('lightbox-container')
+    );
+    this.back = last(element.getElementsByClassName('back'));
+    this.next = last(element.getElementsByClassName('next'));
+    this.title = last(element.getElementsByClassName('title'));
+    this.img = last(element.getElementsByTagName('img'));
   }
 
   show(imgUrl, title, onClickNext = null, onClickBack = null) {
     this.sizeOverlay();
     this.positionLightbox();
 
-    this.open = true;
+    this.isOpen = true;
     this.img.src = imgUrl;
     this.title.innerHTML = title;
+
     if (onClickNext) {
-      this.attachNext(onClickNext);
+      this.next.style.visibility = 'visible';
+      this.next.addEventListener('click', onClickNext);
     }
 
     if (onClickBack) {
-      this.attachBack(onClickBack);
+      this.back.style.visibility = 'visible';
+      this.back.addEventListener('click', onClickBack);
     }
 
     queueAnimation(this.element, 'fade-in', () => {
-      this.element.style.display = 'block';
+      this.element.style.display = 'flex';
     });
-  }
-
-  attachNext(onClickNext) {
-    this.next.style.visibility = 'visible';
-    this.next.addEventListener('click', onClickNext);
-  }
-
-  attachBack(onClickBack) {
-    this.back.style.visibility = 'visible';
-    this.back.addEventListener('click', onClickBack);
   }
 
   close() {
@@ -120,22 +129,40 @@ class Lightbox {
   }
 
   goBack(imgUrl, title, onClickNext = null, onClickBack = null) {
-    const self = this;
-    const newTree = self.buildInnerTree(imgUrl, title);
-    self.element.appendChild(newTree);
-    self.lightboxContainer.remove();
-    queueAnimation(newTree, 'slide-in-from-left', () => {
+    const newTree = this.buildInnerTree(
+      imgUrl,
+      title,
+      onClickNext,
+      onClickBack
+    );
+    this.element.appendChild(newTree);
+    const oldLightboxContainer = this.lightboxContainer;
+    queueAnimation(oldLightboxContainer, 'slide-out-to-right', () => {
       const element = document.getElementById('lightbox');
       element.appendChild(newTree);
-      self.storeTree(element);
+      this.storeTree(element);
+      setTimeout(() => {
+        oldLightboxContainer.remove();
+      }, 300);
+    });
+  }
 
-      if (onClickNext) {
-        self.attachNext(onClickNext);
-      }
-
-      if (onClickBack) {
-        self.attachBack(onClickBack);
-      }
+  goForward(imgUrl, title, onClickNext = null, onClickBack = null) {
+    const newTree = this.buildInnerTree(
+      imgUrl,
+      title,
+      onClickNext,
+      onClickBack
+    );
+    this.element.appendChild(newTree);
+    const oldLightboxContainer = this.lightboxContainer;
+    queueAnimation(oldLightboxContainer, 'slide-out-to-left', () => {
+      const element = document.getElementById('lightbox');
+      element.appendChild(newTree);
+      this.storeTree(element);
+      setTimeout(() => {
+        oldLightboxContainer.remove();
+      }, 300);
     });
   }
 }
